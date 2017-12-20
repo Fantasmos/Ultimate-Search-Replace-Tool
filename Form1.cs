@@ -17,23 +17,30 @@ namespace UltimateTXTReplaceTool
 
         public Form1()
         {
-            
-            
             InitializeComponent();
 
             CreateTextBoxRow("Search", "Replace");
 
-
             Console.WriteLine("DATA");
         }
 
-        void UpdateForm (List<string> StringCollection, TableLayoutPanel TableToupdate)
+        void UpdateForm (List<string> Searches, List<string> Replaces, TableLayoutPanel TableToupdate)
         {
             TableToupdate.Controls.Clear();
-
-            foreach (string item in StringCollection)
+            for (int i = 0; i < Math.Max(Searches.Count, Replaces.Count); i++)
             {
-                CreateTextBoxRow(item, "EMPTY");
+                if (Searches.Count <= i)
+                {
+                    CreateTextBoxRow("EMPTY", Replaces[i]);
+                }
+                else if (Replaces.Count <= i)
+                {
+                    CreateTextBoxRow(Searches[i], "EMPTY");
+                }
+                else
+                {
+                    CreateTextBoxRow(Searches[i], Replaces[i]);
+                }
             }
         }
 
@@ -205,9 +212,16 @@ namespace UltimateTXTReplaceTool
 
         private void Button1_Click_1(object sender, EventArgs e)
         {
-            List<string> Collection = BuildStringCollection(TemplateTextBox.Text);
-            UpdateForm(Collection, SearchReplaceTable);
-            
+            List<string> Searches = BuildStringCollection(TemplateTextBox.Text);  
+            List<string> Replaces = GetColumn(1);
+            UpdateForm(Searches, Replaces, SearchReplaceTable);
+        }
+
+        private void UpdateTable()
+        {
+            List<string> Searches = BuildStringCollection(TemplateTextBox.Text);
+            List<string> Replaces = BuildStringCollection(ReplaceTextBox.Text);
+            UpdateForm(Searches, Replaces, SearchReplaceTable);
         }
 
         private void TemplateButton_Click(object sender, EventArgs e)
@@ -258,6 +272,78 @@ namespace UltimateTXTReplaceTool
             {
                 MessageBox.Show("No file exists!");
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string FullString = "";
+
+            foreach (string entry in GetColumn(1))
+            {
+                FullString += entry +'\n';
+            }
+
+            Clipboard.SetText(FullString);
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        List<string> GetColumn(int col)
+        {
+            List<string> searches = new List<string>();
+            for (int i = 0; i < SearchReplaceTable.Controls.Count / 3; i++)
+            {
+                searches.Add(SearchReplaceTable.GetControlFromPosition(col, i).Text);
+            }
+            return searches;
+        }
+        List<string> GetSearches()
+        {
+            return GetColumn(1);
+        }
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            string FullString = "";
+
+            foreach(string entry in GetColumn(0)) {
+                FullString += entry + '\n';
+            }
+
+            Clipboard.SetText(FullString);
+        }
+
+        private void SearchReplaceTable_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void Replaces_Click(object sender, EventArgs e)
+        {
+            Stream myStream = null;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                ReplaceTextBox.Text = openFileDialog1.FileName;
+            }
+            else
+            {
+                MessageBox.Show("An error has occured, this is an invalid file!");
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            List<string> Searches = GetColumn(0);
+            List<string> Replaces = BuildStringCollection(ReplaceTextBox.Text);
+            UpdateForm(Searches, Replaces, SearchReplaceTable);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            UpdateTable();
         }
     }
 }

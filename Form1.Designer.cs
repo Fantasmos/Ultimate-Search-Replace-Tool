@@ -275,7 +275,7 @@ namespace UltimateTXTReplaceTool
             this.ClipBoardText.ReadOnly = true;
             this.ClipBoardText.Size = new System.Drawing.Size(100, 13);
             this.ClipBoardText.TabIndex = 13;
-            this.ClipBoardText.Text = "Copy to clipboard";
+            this.ClipBoardText.Text = "Resave File";
             this.ClipBoardText.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // Form1

@@ -152,8 +152,10 @@ namespace UltimateTXTReplaceTool
         private void button3_Click(object sender, EventArgs e)
         {
             Stream myStream = null;
-            SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
 
+            SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
+            SaveFileDialog1.AddExtension = false;
+            
             if (SaveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 OutputTexbox.Text = SaveFileDialog1.FileName;
@@ -274,6 +276,26 @@ namespace UltimateTXTReplaceTool
             }
         }
 
+        void SaveTextToFile (string FullString)
+        {
+            Stream myStream = null;
+
+            SaveFileDialog SaveFileDialog1 = new SaveFileDialog();
+            SaveFileDialog1.DefaultExt = "txt";
+            SaveFileDialog1.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            SaveFileDialog1.AddExtension = true;
+            if (SaveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string OutPutFilePath = SaveFileDialog1.FileName;
+                System.IO.File.Delete(OutPutFilePath);
+                System.IO.File.WriteAllText(OutPutFilePath, FullString);
+                MessageBox.Show("Completed!");
+            }
+            else
+            {
+                MessageBox.Show("An error has occured, this is an invalid file!");
+            }
+        }
         private void button4_Click(object sender, EventArgs e)
         {
             string FullString = "";
@@ -282,8 +304,7 @@ namespace UltimateTXTReplaceTool
             {
                 FullString += entry +'\n';
             }
-
-            Clipboard.SetText(FullString);
+            SaveTextToFile(FullString);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -307,11 +328,11 @@ namespace UltimateTXTReplaceTool
         {
             string FullString = "";
 
-            foreach(string entry in GetColumn(0)) {
+            foreach (string entry in GetColumn(1))
+            {
                 FullString += entry + '\n';
             }
-
-            Clipboard.SetText(FullString);
+            SaveTextToFile(FullString);
         }
 
         private void SearchReplaceTable_Paint(object sender, PaintEventArgs e)

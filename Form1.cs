@@ -75,7 +75,7 @@ namespace UltimateTXTReplaceTool
 
                 while ((line = file.ReadLine()) != null)
                 {
-                    for (int i = 0; i < SearchReplaceTable.RowCount + 2; i++)
+                    for (int i = 0; i < SearchReplaceTable.Controls.Count / 3; i++)
                     {
                         string search = SearchReplaceTable.GetControlFromPosition(0, i).Text;
                         string replace = SearchReplaceTable.GetControlFromPosition(1, i).Text;
